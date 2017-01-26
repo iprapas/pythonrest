@@ -1,0 +1,31 @@
+{
+	"id": "c45ed399-a4fa-37c6-5c60-a38d2e3f7d60",
+	"name": "restpython",
+	"requests": [
+		{
+			"id": "1fccbfdd-2027-1750-21cc-185ab6930a37",
+			"headers": "Content-Type: application/json\n",
+			"url": "http://localhost:5000/todo/api/v1.0/tasks",
+			"pathVariables": {},
+			"preRequestScript": null,
+			"method": "POST",
+			"collectionId": "c45ed399-a4fa-37c6-5c60-a38d2e3f7d60",
+			"data": [],
+			"dataMode": "raw",
+			"name": "http://localhost:5000/todo/api/v1.0/tasks",
+			"description": "insert request",
+			"descriptionFormat": "html",
+			"time": 1485108437994,
+			"version": 2,
+			"responses": [],
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"rawModeData": "{\"gisid\":\"1047\",\"owner\":\"OTE\",\"type\":\"cable\",\"material\":\"glass\",\"speed\":\"1000\",\"technology\":\"optical1\",\"installdate\":\"10/10/1992\",\"comment\":\"\"}"
+		}
+	],
+	"order": [
+		"1fccbfdd-2027-1750-21cc-185ab6930a37"
+	],
+	"timestamp": 1485108437994
+}
