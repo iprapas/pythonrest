@@ -1,4 +1,5 @@
-from flask import Flask, jsonify, request
+from flask.ext.httpauth import HTTPBasicAuth
+from flask import Flask, jsonify, request, make_response
 import psycopg2
 import json
 from itsdangerous import Serializer, BadSignature
@@ -6,8 +7,12 @@ import atexit
 
 conn = psycopg2.connect(database="network_infra", user="postgres", password="12345678", host="127.0.0.1", port="5432")
 atexit.register(conn.close)
+auth = HTTPBasicAuth()
 cur = conn.cursor()
 serializer = Serializer('secret-key')
+
+
+
 
 def node_req_status(node_id):
     stm = '''
@@ -77,14 +82,29 @@ app = Flask(__name__)
 
 
 from flask import abort
+@auth.get_password
+def get_password(username):
+    stm =  "SELECT password FROM rest.users WHERE username='{0}';".format(username)
+    cur.execute(stm)
+    try:
+	return cur.fetchone()[0]
+    except TypeError as e:
+	return None
+
+@auth.error_handler
+def unauthorized():
+    return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
 
 
 @app.route('/api/v1.0/nodes', methods=['GET'])
+@auth.login_required
 def get_tasks():
     return jsonify({'Nodes': all_req_status()})
 
 
 @app.route('/api/v1.0/logs', methods=['GET'])
+@auth.login_required
 def get_logs():
     return jsonify({'Logs': all_logs()})
 
@@ -96,7 +116,7 @@ def get_node_status(key_id):
     #     abort(404)
     log_call(request)
     try:
-        task_id = setzarializer.loads(key_id)
+        task_id = serializer.loads(key_id)
     except BadSignature as e:
         return jsonify({'BadSignatureError':str(e)})
 
@@ -117,6 +137,7 @@ def create_node():
 
 
 @app.route('/api/v1.0/nodes/<int:id>/status', methods=['PATCH'])
+@auth.login_required
 def set_node_status(id):
     log_call(request)
     if not request.json or 'status' not in request.json:

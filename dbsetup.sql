@@ -9,9 +9,9 @@ CREATE SCHEMA rest;
 SET search_path TO pg_catalog,public,rest;
 -- ddl-end --
 
--- object: rest.person_pk_seq | type: SEQUENCE --
--- DROP SEQUENCE rest.person_pk_seq;
-CREATE SEQUENCE rest.person_pk_seq
+-- object: rest.users_pk_seq | type: SEQUENCE --
+-- DROP SEQUENCE rest.users_pk_seq;
+CREATE SEQUENCE rest.users_pk_seq
 	INCREMENT BY 1
 	MINVALUE 0
 	MAXVALUE 2147483647
@@ -76,11 +76,13 @@ CREATE SEQUENCE rest.login_pk_seq
 
 -- object: rest.Person | type: TABLE --
 -- DROP TABLE rest.Person;
-CREATE TABLE rest.Person(
-	Id 			bigint NOT NULL DEFAULT nextval('rest.person_pk_seq'::regclass),
+CREATE TABLE rest.Users(
+	Id 			bigint NOT NULL DEFAULT nextval('rest.users_pk_seq'::regclass),
 	FirstName 	text,
 	LastName 	text,
-	CONSTRAINT 	pk_person_id PRIMARY KEY (Id)
+        Username        text,
+        Password	text,
+	CONSTRAINT 	pk_users_id PRIMARY KEY (Id)
 
 );
 -- ddl-end --
@@ -146,7 +148,7 @@ CREATE TABLE rest.Login(
 -- object: Person_fk | type: CONSTRAINT --
 -- ALTER TABLE rest.Login DROP CONSTRAINT Person_fk;
 ALTER TABLE rest.Login ADD CONSTRAINT Person_fk FOREIGN KEY (PersonId)
-REFERENCES rest.Person (Id) MATCH FULL
+REFERENCES rest.Users (Id) MATCH FULL
 ON DELETE CASCADE ON UPDATE NO ACTION;
 -- ddl-end --
 
@@ -158,9 +160,9 @@ ALTER TABLE rest.Login ADD CONSTRAINT Id UNIQUE (PersonId);
 
 
 
--- ALTER TABLE rest.login  DROP CONSTRAINT person_id_fk;
-ALTER TABLE rest.login ADD CONSTRAINT person_id_fk FOREIGN KEY (PersonId)
-REFERENCES rest.person (Id) MATCH FULL
+-- ALTER TABLE rest.login  DROP CONSTRAINT users_id_fk;
+ALTER TABLE rest.login ADD CONSTRAINT users_id_fk FOREIGN KEY (PersonId)
+REFERENCES rest.users (Id) MATCH FULL
 ON DELETE CASCADE ON UPDATE CASCADE;
 -- ddl-end --
 
