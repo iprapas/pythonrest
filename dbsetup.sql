@@ -91,8 +91,9 @@ CREATE TABLE rest.Log(
 	Id 				bigint NOT NULL DEFAULT nextval('rest.log_pk_seq'::regclass),
 	userid 			text,
 	action 			text,
-	ip				text,
+	ip			text,
 	browser			text,
+	time			date,
 	comment 		text,
 	CONSTRAINT 		pk_log_id PRIMARY KEY (Id)
 );
@@ -123,6 +124,7 @@ CREATE TABLE rest.node(
 	technology 	    text,
 	installdate		date,
 	declaredate		date,
+	status	    	    text,
 	comment		    text,
 	CONSTRAINT 	    pk_cable_id PRIMARY KEY (Id),
 	CONSTRAINT 	    unique_gis_id UNIQUE (gisId)
